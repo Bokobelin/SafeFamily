@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Register</div>
+    <div class="btn-group">
+        <form method="POST">
+            <label>Username:</label><br>
+            <input type="text" name="username" required><br><br>
+            <label>Email:</label><br>
+            <input type="email" name="email" required><br><br>
+            <label>Role:</label><br>
+            <input type="text" name="role" required><br><br>
+            <label>Password:</label><br>
+            <input type="password" name="password" required><br><br>
+            <label>Confirm Password:</label><br>
+            <input type="password" name="confirm_password" required><br><br>
+            <button class="btn btn-primary max-w-[100px]" type="submit">Register</button>
+        </form>
+    </div>
+    <p class="note">Already have an account?
+        <button class="btn btn-secondary max-w-[70px]"><a
+                href="{{ url_for('auth.show_login_form') }}">Login</a></button>
+    </p>
+</div>
+{% endblock %}

@@ -7,3 +7,6 @@ __DS_Store
 instance/
 .env
 env/
+logs/
+*.log
+venv/

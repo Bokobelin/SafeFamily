@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+body {
+    @apply m-0 bg-[#f4f7fa] text-[#333];
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+nav {
+    @apply bg-[#2c3e50] px-[40px] py-[15px] flex justify-start items-center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    @apply text-[#ecf0f1] no-underline mr-[30px] font-semibold text-[1rem] [transition:color_0.3s_ease];
+}
+
+nav a:hover {
+    @apply hover:text-[#3498db];
+}
+
+label {
+    @apply font-semibold text-[#333];
+}
+
+.dashboard-layout {
+    @apply flex gap-[30px] min-h-[80vh];
+}
+
+.main-content {
+    @apply flex-grow min-w-[0] pt-[15px] overflow-y-auto overflow-x-auto;
+}
+
+.sidebar {
+    @apply w-[300px] pt-[15px] flex-shrink-0 overflow-y-auto;
+}
+
+.card {
+    @apply bg-[white] p-[25px] rounded-[12px] mb-[25px] border-[1px] border-[solid] border-[#eef1f4];
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    @apply text-[1.4rem] font-bold text-[#2c3e50] mb-[20px] pb-[10px];
+    border-bottom: 2px solid #3498db;
+}
+
+.date-selector,
+.search-input-group {
+    @apply flex gap-[10px] items-center mb-[20px];
+}
+
+form select {
+    @apply mb-[20px] items-center gap-[15px];
+}
+
+input[type="email"],
+input[type="date"],
+input[type="time"],
+input[type="password"],
+input[type="text"],
+textarea,
+select {
+    @apply px-[12px] py-[8px] border-[1px] border-[solid] border-[#bdc3c7] rounded-[4px] text-[1rem] [transition:border-color_0.3s];
+}
+
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #3498db;
+    border-radius: 4px;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0;
+    font-size: 0.95rem;
+}
+
+.input-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.input-group input {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border 0.2s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-group {
+    @apply flex flex-col gap-[10px] mb-[20px];
+}
+
+.btn {
+    @apply p-[10px] border-[none] rounded-[6px] cursor-pointer font-semibold [transition:all_0.2s_ease];
+}
+
+.btn-primary {
+    @apply bg-[#3498db] w-full text-[white];
+}
+
+.btn-danger {
+    @apply bg-[#e74c3c] w-full text-[white];
+}
+
+.btn-secondary {
+    @apply bg-[#ecf0f1] w-full text-[#2c3e50];
+}
+
+.btn-success {
+    @apply bg-[#2ecc71] w-fit text-[white];
+}
+
+.btn-failure {
+    @apply !bg-[#c0392b] !text-[white] text-[1.1em] w-fit;
+}
+
+.btn-area {
+    @apply mx-[0] my-[25px] text-center;
+}
+
+.btn:hover {
+    @apply hover:opacity-90 hover:-translate-y-px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+nothingelse {
+    color: #e74c3c;
+}
+
+td form button {
+    @apply bg-[#e74c3c] text-[white] px-[10px] py-[5px] text-[0.9em] uppercase;
+}
+
+.table-modern {
+    @apply mx-[0] my-[20px] w-full rounded-[8px] border-collapse [border-spacing:0] text-[0.95rem];
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-modern th,
+.table-modern td {
+    @apply px-[15px] py-[12px];
+    border: 1px solid #ecf0f1;
+}
+
+.table-modern th {
+    @apply px-[15px] py-3 bg-[#34495e] text-[white] text-center font-semibold;
+}
+
+.table-modern thead tr th {
+    @apply bg-[#ecf0f1] text-[#333] font-semibold border-b-[none] px-[10px] py-[8px];
+}
+
+.table-modern tr:nth-child(even) td {
+    @apply bg-[#f9f9f9];
+}
+
+.table-modern tr:hover {
+    @apply hover:bg-[#f0f0ff];
+}
+
+.table-modern td {
+    @apply border-b-[1px_solid_#ecf0f1] bg-[white];
+}
+
+.table-action-delete {
+    @apply bg-none border-[none] text-[#e74c3c] font-semibold cursor-pointer p-[5px];
+}
+
+.link-active {
+    @apply text-[#7f8c8d] text-[0.85rem] mt-[15px];
+}
+
+/* Top and Bottom Bars */
+
+.top-bar {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    /* Stack elements vertically on small screens */
+    align-items: flex-start;
+    gap: 10px;
+    /* Space between the title and the note */
+}
+
+/* General Message */
+.message {
+    color: #27ae60 !important;
+    /* Professional green for success message */
+    margin-top: 15px;
+    font-weight: 600;
+    padding: 10px;
+    background-color: #e6ffed;
+    border-radius: 4px;
+}
+
+.note {
+    font-size: 0.9em;
+    color: #7f8c8d !important;
+    /* Slightly darker gray for better readability */
+    padding: 10px;
+    background-color: #ecf0f1;
+    /* Light background for the note box */
+    border-radius: 6px;
+}
+
+.bottom-bar {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    color: #7f8c8d;
+}
+
+/* Flash Messages and Block Content */
+.content-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    /* Center the content and add vertical margin */
+    padding: 0 40px;
+}
+
+.flash {
+    padding: 12px 20px;
+    border-radius: 8px;
+    /* Softer rounded corners */
+    margin-bottom: 15px;
+    /* Spacing between messages */
+    font-weight: 500;
+    border-left: 5px solid;
+    /* A solid line for better visual impact */
+}
+
+.info {
+    background-color: #e7f3fe;
+    color: #3178c6;
+    border-left-color: #3178c6;
+}
+
+.success {
+    background-color: #e6ffed;
+    color: #1a7e3c;
+    border-left-color: #1a7e3c;
+}
+
+.danger {
+    background-color: #ffe8e6;
+    color: #cc0000;
+    border-left-color: #cc0000;
+}
+
+.warning {
+    background-color: #fff8e1;
+    color: #b08d00;
+    border-left-color: #b08d00;
+}

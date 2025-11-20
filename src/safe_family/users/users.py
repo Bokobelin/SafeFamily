@@ -1,8 +1,10 @@
+"""User URL routes for Safe Family application."""
+
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt, jwt_required
 
-from models import User
-from schemas import UserSchema
+from src.safe_family.core.models import User
+from src.safe_family.core.schemas import UserSchema
 
 user_bp = Blueprint("users", __name__)
 
@@ -10,6 +12,7 @@ user_bp = Blueprint("users", __name__)
 @user_bp.route("/all", methods=["GET"])
 @jwt_required()
 def get_all_users():
+    """Get a paginated list of all users. Admins only."""
     claims = get_jwt()
     if claims.get("is_admin") != "admin":
         return jsonify({"msg": "Admins only!"}), 403

@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-layout">
+    <div class="main-content">
+        <div class="card">
+            <div class="card-header mt-[20px]">
+                Suspicious Logs for {{ date }}
+            </div>
+
+            <div class="btn-group input-group">
+                <form method="get" action="/suspicious" class="date-selector">
+                    <label for="date-select">Select date:</label>
+                    <input type="date" style="min-width: 150px;" id="date-select" name="date" value="{{ date }}">
+                    <button class="btn btn-secondary" type="submit">
+                        Go
+                    </button>
+                </form>
+            </div>
+
+            <table class="table-modern">
+                <thead>
+                    <tr>
+                        <th>QH</th>
+                        <th>COUNT</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in suspicious_data %}
+                    <tr>
+                        <td>
+                            <a href="https://{{ row[1] }}" target="_blank">{{ row[1] }}</a>
+                        </td>
+                        <td>{{ row[2] }}</td>
+                        <td>
+                            <form method="post" action="/tag_block">
+                                <input type="hidden" name="qh" value="{{ row[1] }}">
+                                <input type="hidden" name="date" value="{{ date }}">
+                                <select name="type">
+                                    {% for t in block_types %}
+                                    <option value="{{ t }}">{{ t }} </option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn" type="submit">
+                                    Tag
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="link-active">
+                {% if page > 1 %}
+                <a class="btn" style="color: white; background-color: #3498db;"
+                    href="?date={{ date }}&page={{ page - 1 }}">Previous</a>
+                {% endif %}
+                <span>Page {{ page }}</span>
+                {% if (page * limit) < total %} <a class="btn" style="color: white; background-color: #3498db;"
+                    href="?date={{ date }}&page={{ page + 1 }}">
+                    Next</a>
+                    {% endif %}
+            </div>
+
+        </div>
+        <div class="card">
+            <div class="card-header">Block List</div>
+            <div class="btn-group">
+                <form method="get" action="/suspicious" class="input-group" style="display: block;">
+                    <input type="hidden" type="date" name="date" value="{{ date }}">
+                    <input type="text" name="search" placeholder="Search QH..." value="{{ search_query or '' }}"
+                        style="width: 100%; margin-bottom: 15px;">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </form>
+            </div>
+            <table class="table-modern">
+                <thead>
+                    <tr>
+                        <th>QH</th>
+                        <th>Type</th>
+                        <th>Action1</th>
+                        <th>Action2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in block_list %}
+                    <tr>
+                        <form method="post" action="/modify_block/{{ row[0] }}">
+                            <td>
+                                <input type="hidden" name="block_id" value="{{ row[0] }}">
+                                <input type="text" name="qh" value="{{ row[1] }}">
+                            </td>
+                            <td>
+                                <select name="type">
+                                    {% for t in block_types %}
+                                    <option value="{{ t }}" {% if t==row[2] %}selected{% endif %}>{{ t }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><button class="btn btn-danger"><a
+                                        href="/delete_block/{{ row[0] }}?date={{ date }}">Delete</a></button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Modify</button>
+                            </td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="link-active">
+                {% if block_page > 1 %}
+                <a href="?date={{ date }}&page={{ page }}&block_page={{ block_page - 1 }}&rule_page={{ rule_page }}"
+                    class="btn" style="color: white; background-color: #3498db;">Prev</a>
+                {% endif %}
+                <span>Block Page {{ block_page }}</span>
+                {% if (block_page * block_limit) < total_blocks %} <a href="?date={{ date }}&page={{ page }}&block_page={{ block_page + 1 }}&rule_page={{
+                            rule_page }}" class="btn" style="color: white; background-color: #3498db;">
+                    Next</a>
+                    {% endif %}
+            </div>
+        </div>
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-header">Rules Toggle</div>
+            <div class="btn-group">
+                <form action="/rules_toggle/enable_all">
+                    <button type="submit" class="btn btn-primary">
+                        Enable All Rules(Except AI, Scratch and Unity)
+                    </button>
+                </form>
+                <form action="/rules_toggle/disable_all"
+                    onsubmit="return confirm('Are you sure you brush teeth, take out the garbage, and wash the dishes?');">
+                    <button type="submit" class="btn btn-secondary">
+                        Disable All Rules
+                    </button>
+                </form>
+                <form action="/rules_toggle/stop_all_traffic">
+                    <button type="submit" class="btn btn-danger">
+                        Stop All Traffic
+                    </button>
+                </form>
+                <form action="/rules_toggle/enable_all_traffic">
+                    <button type="submit" class="btn btn-primary">
+                        Allow All Traffic
+                    </button>
+                </form>
+                <form action="/rules_toggle/check_all_traffic">
+                    <button type="submit" class="btn btn-secondary">
+                        Check All Traffic
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Log Analysis</div>
+            <div class="btn-group">
+                <form action="/analyze_route" method="get">
+                    <button type="submit" class="btn btn-primary">
+                        Analyze Logs
+                    </button>
+                </form>
+                <form action="/schedule_rules" method="get">
+                    <button type="submit" class="btn btn-secondary">
+                        Schedule Rules
+                    </button>
+                </form>
+                <form action="/auto_push" method="get">
+                    <button type="submit" class="btn btn-danger">
+                        Push Block List to GitHub
+                    </button>
+                </form>
+                <form action="/auto_import" method="get">
+                    <button type="submit" class="btn btn-secondary">
+                        Import Block List from Files
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Add Block List</div>
+            <form method="post" action="/add_block">
+                <div class="w-full mb-[20px]">
+                    <textarea name="qh" id="qh" placeholder="Add one block per line..." type="text" class="w-full"
+                        required></textarea>
+                </div>
+                <div class="mb-[10px]">
+                    <label for="block_type">Type:</label>
+                    <select name="type" id="block_type">
+                        {% for t in block_types %}
+                        <option value=" {{ t }}">{{ t }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Block</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Add New Rules</div>
+            <form method="post" action="/update_filter_rule">
+                <input type="hidden" name="date" value="{{ date }}">
+                <textarea name="rule" placeholder="Add one rule per line..." class="w-full mb-[20px]"></textarea>
+                <button type="submit" class="btn btn-primary">
+                    Add Rules
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Filter Rules</div>
+            <table class="table-modern">
+                <thead>
+                    <tr>
+                        <th>QH</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rule in filter_rules %}
+                    <tr>
+                        <td>{{ rule[0] }}</td>
+                        <td>
+                            <button class="btn btn-danger">
+                                <a href="/delete_filter_rule/{{ rule[0] }}?date={{ date }}">
+                                    Delete
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="link-active">
+                {% if rule_page > 1 %}
+                <a class="btn" style="color: white; background-color: #3498db;"
+                    href="?date={{ date }}&page={{ page }}&rule_page={{ rule_page - 1 }}&block_page={{ block_page }}">
+                    Prev
+                </a>
+                {% endif %}
+                <span>Rule Page {{ rule_page }}</span>
+                {% if (rule_page * rule_limit) < total_rules %} <a class="btn"
+                    style="color: white; background-color: #3498db;"
+                    href="?date={{ date }}&page={{ page }}&rule_page={{ rule_page + 1 }}&block_page={{ block_page }}">
+                    Next
+                    </a>
+                    {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

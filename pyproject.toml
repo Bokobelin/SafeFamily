@@ -1,0 +1,24 @@
+[tool.ruff]
+lint.extend-select = ["ALL"]
+lint.ignore = [
+    "T201",
+    "E501",
+    "S104",
+    "S105",
+    "S201",
+    "DTZ002",
+    "D203",
+    "D213",
+    "ANN201",
+    "BLE001",
+]
+
+
+[project]
+name = "SafeFamily"
+version = "2025.1.0"
+requires-python = ">=3.8"
+description = "A parental control application to help families manage and monitor internet usage."
+authors = [{ name = "Zhen Zhang", email = "zzuse@outlook.com" }]
+license = "MIT"
+license-files = ["LICEN[CS]E.*"]

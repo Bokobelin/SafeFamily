@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header mt-[20px]">Rule Management</div>
+    <table class="table-modern">
+        <tr>
+            <th>ID</th>
+            <th>Rule</th>
+            <th>Start Time</th>
+            <th>End Time (Reference)</th>
+            <th>Update</th>
+            <th>Enable/Disable</th>
+            <th>Delete</th>
+        </tr>
+        {% for rule in rules %}
+        <tr>
+            <td>{{ rule[0] }}</td>
+            <td>{{ rule[1] }}</td>
+            <td>{{ rule[2] }}</td>
+            <td>{{ rule[3] or "-" }}</td>
+
+            <td>
+                <form method="POST" class="input-group">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="rule_id" value="{{ rule[0] }}">
+                    <input type="time" name="start_time" value="{{ rule[2] }}">
+                    <input type="time" name="end_time" value="{{ rule[3] or '' }}">
+
+                    <div>
+                        {% set days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] %}
+                        {% set selected_days = rule[4].split(",") if rule[4] else [] %}
+                        {% for i in range(7) %}
+                        <label>
+                            <input type="checkbox" name="day_of_week" value="{{ i }}" {% if i|string in selected_days or
+                                rule[4]=="*" %}checked{% endif %}>
+                            {{ days[i] }}
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">Save</button>
+                </form>
+            </td>
+
+            <td>
+                {% if rule[5] %}
+                <form method="post" action="/schedule_rules">
+                    <input type="hidden" name="action" value="disable">
+                    <input type="hidden" name="rule_id" value="{{ rule[0] }}">
+                    <button type="submit" class="btn btn-primary">Disable</button>
+                </form>
+                {% else %}
+                <form method="post" action="/schedule_rules">
+                    <input type="hidden" name="action" value="enable">
+                    <input type="hidden" name="rule_id" value="{{ rule[0] }}">
+                    <button type="submit" class="btn btn-secondary">Enable</button>
+                </form>
+                {% endif %}
+            </td>
+
+            <td>
+                <!-- Delete Form -->
+                <form method="POST" onsubmit="return confirm('Delete this rule?');">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="rule_id" value="{{ rule[0] }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="card-header mt-[20px]">Add New Schedule Rule</div>
+    <form method="POST" class="input-group">
+        <input type="hidden" name="action" value="add">
+        <label for="rule_name">Rule Name:</label>
+        <select name="rule_name" id="rule_name">
+            {% for rule in available_rules %}
+            <option value="{{ rule }}">{{ rule }}</option>
+            {% endfor %}
+        </select>
+        <label for="start_time">Start Time:</label>
+        <input type="time" name="start_time" id="start_time" required>
+        <label for="end_time">End Time:</label>
+        <input type="time" name="end_time" id="end_time">
+        <button class="btn btn-primary" type="submit">Add Schedule Rule</button>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-header mt-[20px]">Assign Rules to Users</div>
+    <form method="POST">
+        <input type="hidden" name="action" value="assign">
+        <table class="table-modern">
+            <tr>
+                <th>User</th>
+                <th>Assigned Rule</th>
+            </tr>
+            {% for user in assigned_rules %}
+            <tr>
+                <td class="text-center">{{ user[1] }}</td>
+                <td class="text-center">
+                    <select name="rule_{{ user[0] }}">
+                        {% for rule in available_rules %}
+                        <option value="{{ rule }}" {% if user.assigned_rule==rule %}selected{% endif %}>
+                            {{ rule }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button class="btn btn-primary" type="submit">Assignment Rule</button>
+    </form>
+</div>
+
+{% endblock %}
