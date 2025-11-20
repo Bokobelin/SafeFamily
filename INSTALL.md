@@ -16,7 +16,7 @@ This guide covers installing and deploying SafeFamily Project with Gunicorn and 
 ## Prerequisites
 
 - Ubuntu 20.04+ / Debian 11+ (or similar Linux distribution)
-- Python 3.9+
+- Python 3.11+
 - Nginx
 - PostgreSQL 13+
 - Domain name (for SSL certificate)
@@ -54,9 +54,8 @@ cd SafeFamily
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-pip install -e .
-# or
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ### 5. Environment Configuration

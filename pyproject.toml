@@ -17,7 +17,7 @@ lint.ignore = [
 [project]
 name = "SafeFamily"
 version = "2025.1.0"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 description = "A parental control application to help families manage and monitor internet usage."
 authors = [{ name = "zzuse", email = "zzuseme@gmail.com" }]
 license = "MIT"
