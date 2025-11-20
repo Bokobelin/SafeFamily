@@ -6,14 +6,15 @@ from flask import Flask, jsonify
 
 from config.logging import setup_logging
 from config.settings import settings
-from src.safe_family.auto_git.auto_git import auto_git_blueprint
+from src.safe_family.auto_git.auto_git import auto_git_bp
 from src.safe_family.core.auth import auth_bp
 from src.safe_family.core.extensions import db, jwt, mail
 from src.safe_family.core.models import User
 from src.safe_family.rules.scheduler import schedule_rules_bp
 from src.safe_family.todo.todo import todo_bp
 from src.safe_family.urls.analyzer import analyze_bp
-from src.safe_family.urls.blocker import rules_toggle_blueprint
+from src.safe_family.urls.blocker import rules_toggle_bp
+from src.safe_family.urls.receiver import receiver_bp
 from src.safe_family.urls.suspicious import suspicious_bp
 from src.safe_family.users.users import user_bp
 
@@ -42,10 +43,11 @@ def create_app():
     jwt.init_app(app)
     mail.init_app(app)
 
+    app.register_blueprint(receiver_bp)
     app.register_blueprint(analyze_bp)
-    app.register_blueprint(auto_git_blueprint)
+    app.register_blueprint(auto_git_bp)
     # The issue was added to the bug tracker: rules_toggle rename to url_blocker
-    app.register_blueprint(rules_toggle_blueprint)
+    app.register_blueprint(rules_toggle_bp)
     app.register_blueprint(schedule_rules_bp)
     app.register_blueprint(suspicious_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")

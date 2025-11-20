@@ -16,7 +16,7 @@ from src.safe_family.core.auth import admin_required
 from src.safe_family.core.extensions import get_db_connection, local_tz
 
 logger = logging.getLogger(__name__)
-auto_git_blueprint = Blueprint("auto_git", __name__)
+auto_git_bp = Blueprint("auto_git", __name__)
 
 
 def rule_auto_commit():
@@ -68,7 +68,7 @@ def rule_auto_commit():
         logger.exception("Error adding files to git: %d", e.returncode)
 
 
-@auto_git_blueprint.route("/auto_push")
+@auto_git_bp.route("/auto_push")
 @admin_required
 def auto_push():
     """Automatically commit and push block list changes to GitHub."""
@@ -77,7 +77,7 @@ def auto_push():
     return redirect("/")
 
 
-@auto_git_blueprint.route("/auto_import")
+@auto_git_bp.route("/auto_import")
 @admin_required
 def auto_import():
     """Automatically import block list from files into the database."""

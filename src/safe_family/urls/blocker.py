@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 headers = {
     "Content-Type": "application/json",
 }
-rules_toggle_blueprint = Blueprint("rules_toggle", __name__)
+rules_toggle_bp = Blueprint("rules_toggle", __name__)
 """
 curl -u $USERNAME:$PASSWORD ${ADGUARD_HOST}/control/filtering/status
 curl -u $USERNAME:$PASSWORD ${ADGUARD_HOST}/control/blocked_services/all
@@ -495,7 +495,7 @@ def rule_status_gateway():
     return response
 
 
-@rules_toggle_blueprint.route("/rules_toggle/enable_all")
+@rules_toggle_bp.route("/rules_toggle/enable_all")
 @admin_required
 def rules_toggle_enable():
     """Enable all blocking rules except AI."""
@@ -507,7 +507,7 @@ def rules_toggle_enable():
     return redirect("/")
 
 
-@rules_toggle_blueprint.route("/rules_toggle/disable_all")
+@rules_toggle_bp.route("/rules_toggle/disable_all")
 @admin_required
 def rules_toggle_disable():
     """Disable all blocking rules."""
@@ -519,7 +519,7 @@ def rules_toggle_disable():
     return redirect("/")
 
 
-@rules_toggle_blueprint.route("/rules_toggle/stop_all_traffic")
+@rules_toggle_bp.route("/rules_toggle/stop_all_traffic")
 @admin_required
 def stop_all_traffic():
     """Stop all traffic by disabling the gateway on the router."""
@@ -528,7 +528,7 @@ def stop_all_traffic():
     return redirect("/")
 
 
-@rules_toggle_blueprint.route("/rules_toggle/enable_all_traffic")
+@rules_toggle_bp.route("/rules_toggle/enable_all_traffic")
 @admin_required
 def enable_all_traffic():
     """Allow all traffic by enabling the gateway on the router."""
@@ -537,7 +537,7 @@ def enable_all_traffic():
     return redirect("/")
 
 
-@rules_toggle_blueprint.route("/rules_toggle/check_all_traffic")
+@rules_toggle_bp.route("/rules_toggle/check_all_traffic")
 @admin_required
 def check_all_traffic():
     """Check the status of the gateway on the router."""
