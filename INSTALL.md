@@ -56,6 +56,9 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
+# if you want change css, you need start tailwindcss process
+npm install tailwindcss @tailwindcss/cli
+npx @tailwindcss/cli -i src/safe_family/static/css/input.css -o src/safe_family/static/css/styles.css --watch
 ```
 
 ### 5. Environment Configuration

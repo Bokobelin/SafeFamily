@@ -270,3 +270,19 @@ td form button {
     color: #b08d00;
     border-left-color: #b08d00;
 }
+
+.one {
+    display: box;
+}
+
+.main {
+    color: black;
+    border: 5px solid black;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.white {
+    background-color: white;
+    border: 1px solid black;
+}

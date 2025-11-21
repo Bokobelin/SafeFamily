@@ -2,7 +2,6 @@
 
 import fnmatch
 from datetime import datetime, timedelta
-from typing import Optional, Tuple
 
 import pandas as pd
 from flask import Blueprint, jsonify, render_template, request
@@ -52,10 +51,10 @@ def analyze_logs():
 
 
 def get_time_range(
-    range: Optional[str] = None,
-    custom: Optional[Tuple[str, str]] = None,
-    now: Optional[datetime] = None,
-) -> Tuple[datetime, datetime]:
+    range: str | None = None,
+    custom: tuple[str, str] | None = None,
+    now: datetime | None = None,
+) -> tuple[datetime, datetime]:
     """Return (start_time, end_time) based on predefined ranges or custom input.
 
     Args:
