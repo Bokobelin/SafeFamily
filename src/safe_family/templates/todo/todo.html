@@ -10,12 +10,12 @@
             mandatory
             every day)</div>
     </div>
-    <div class="flex gap-[30px] min-h-[80vh];">
+    <div class="dashboard-layout">
         <div class="main-content">
             <div class="card">
                 {% if role == 'admin' %}
                 <form method="get" action="/todo">
-                    <label for="view_user">View User:</label>
+                    <label for="view_user">View User:<br><br></label>
                     <select name="view_user" id="view_user" onchange="this.form.submit()">
                         {% for u in users_list %}
                         <option value="{{ u }}" {% if u==selected_user %}selected{% endif %}>{{ u }}</option>
@@ -25,7 +25,7 @@
                 {% endif %}
 
                 <form method="POST">
-                    <label for="slot_type">Time Slot Length:</label>
+                    <label for="slot_type">Time Slot Length:<br><br></label>
                     <select name="slot_type" id="slot_type" onchange="this.form.submit()">
                         <option value="30" {% if slot_type=='30' %}selected{% endif %}>30 minutes</option>
                         <option value="60" {% if slot_type=='60' %}selected{% endif %}>1 hour</option>
@@ -33,17 +33,18 @@
                 </form>
 
                 <form method="POST">
-                    <label for="is_holiday">Today is a Holiday/School Break/<br>Non-Instructional Day:</label>
-                    <select name="is_holiday" id="is_holiday" onchange="this.form.submit()">
+                    <label for="is_holiday">Is today a <br>Holiday/<br>School Break/<br>Non-Instructional
+                        <br>Day?<br></label>
+                    <select class="btn-area" name="is_holiday" id="is_holiday" onchange="this.form.submit()">
                         <option value="off" {% if is_holiday=='off' %}selected{% endif %}>OFF</option>
                         <option value="on" {% if is_holiday=='on' %}selected{% endif %}>ON</option>
                     </select>
                 </form>
             </div>
         </div>
-        <div class="w-3/5 float-right pt-[15px] ">
+        <div class="w-4/5 float-right pt-[15px]">
             <div id="long-term-container" class="card">
-                <label class=".card-header">Long-Term Goals</label>
+                <label class=".card-header">Long-Term Goals (Draggable Order)</label>
 
                 <form id="add-longterm-form">
                     <input type="text" id="longterm-task-text" placeholder="New long-term task">
@@ -54,7 +55,7 @@
                         <option value="4">Medium-Low</option>
                         <option value="5">Low</option>
                     </select>
-                    <button class="mb-[20px] btn btn-success" type="submit">🏆Add</button>
+                    <button class="mb-[20px] btn btn-success" type="submit">🏆 Add (click or Enter)</button>
                 </form>
 
                 <ul id="longterm-list"></ul>
@@ -211,6 +212,29 @@
             5: "Low"
         };
 
+        const PRIORITY_COLORS = {
+            1: "#c62828",
+            2: "#ff5100",
+            3: "#ff9800",
+            4: "#ffea00",
+            5: "#388e3c"
+        };
+
+        /**
+         * Map any priority range 1..maxValue into a 1..5 scale.
+         * 1 = highest priority
+         * 5 = lowest priority
+         */
+        function mapPriorityToFiveLevels(priority, maxValue) {
+            if (maxValue <= 1) return 1;  // only one level
+
+            // Linear mapping to range [1..5]
+            const normalized = (priority - 1) / (maxValue - 1); // range 0..1
+            const scaled = Math.round(normalized * 4) + 1;      // range 1..5
+
+            return Math.min(5, Math.max(1, scaled)); // clamp safety
+        }
+
         async function loadLongTerm() {
             let r = await fetch("/todo/long_term_list/{{ selected_user_row_id }}", {
                 headers: { "Authorization": "Bearer " + localStorage.getItem("access_token") }
@@ -220,18 +244,38 @@
             let container = document.getElementById("longterm-list");
             container.innerHTML = "";
 
+            color_length = tasks.length;
+
             tasks.forEach(t => {
                 let li = document.createElement("li");
+
+                li.addEventListener("keydown", function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        updateLongTerm(t.goal_id);
+                    }
+                });
+
+                li.addEventListener("click", function (e) {
+                    li.querySelectorAll('input, select').forEach(el => {
+                        el.style.background = PRIORITY_COLORS[mapPriorityToFiveLevels(t.priority, color_length)];
+                        el.style.color = "#000000";
+                    });
+                });
 
                 li.setAttribute("data-id", t.goal_id);
 
                 li.innerHTML = `
-                <input type="text" id="task_${t.goal_id}" value="${t.task}" class="${t.completed ? "done" : ""} mb-[10px]"
+                <input type="text" id="task_${t.goal_id}" value="${t.task}" class="${t.completed ? "done" : ""} 
+                    mb-[10px] text-[#2c3e50] priority-${mapPriorityToFiveLevels(t.priority, color_length)}"
                     style="width: 70%; ">
-                
-                <select id="prio_${t.goal_id}" onchange="updateLongTerm(${t.goal_id})">
+
+                <select class="priority-${mapPriorityToFiveLevels(t.priority, color_length)} text-[#2c3e50]" 
+                    id="prio_${t.goal_id}" onchange="updateLongTerm(${t.goal_id})">
                     ${[1, 2, 3, 4, 5].map(p =>
-                    `<option value="${p}" ${p == t.priority ? "selected" : ""}>${PRIORITY_LABELS[p]}</option>`
+                    `<option value="${p}" ${p == mapPriorityToFiveLevels(t.priority, color_length) ? "selected" : ""}>
+                        ${PRIORITY_LABELS[p]}
+                    </option>`
                 ).join("")}
                 </select>
 

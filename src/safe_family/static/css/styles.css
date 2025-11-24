@@ -172,6 +172,9 @@
   .static {
     position: static;
   }
+  .float-left {
+    float: left;
+  }
   .float-right {
     float: right;
   }
@@ -205,17 +208,11 @@
   .mt-\[30px\] {
     margin-top: 30px;
   }
-  .mb-30 {
-    margin-bottom: calc(var(--spacing) * 30);
-  }
   .mb-\[10px\] {
     margin-bottom: 10px;
   }
   .mb-\[20px\] {
     margin-bottom: 20px;
-  }
-  .mb-\[200px\] {
-    margin-bottom: 200px;
   }
   .block {
     display: block;
@@ -232,11 +229,23 @@
   .table {
     display: table;
   }
+  .w-1 {
+    width: calc(var(--spacing) * 1);
+  }
+  .w-1\/5 {
+    width: calc(1/5 * 100%);
+  }
   .w-3 {
     width: calc(var(--spacing) * 3);
   }
   .w-3\/5 {
     width: calc(3/5 * 100%);
+  }
+  .w-4 {
+    width: calc(var(--spacing) * 4);
+  }
+  .w-4\/5 {
+    width: calc(4/5 * 100%);
   }
   .w-full {
     width: 100%;
@@ -268,17 +277,8 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
-  .gap-30 {
-    gap: calc(var(--spacing) * 30);
-  }
-  .gap-\[10px\] {
-    gap: 10px;
-  }
   .gap-\[30px\] {
     gap: 30px;
-  }
-  .gap-\[100px\] {
-    gap: 100px;
   }
   .rounded-lg {
     border-radius: var(--radius-lg);
@@ -296,12 +296,18 @@
   .pt-\[15px\] {
     padding-top: 15px;
   }
+  .pr-\[15px\] {
+    padding-right: 15px;
+  }
   .text-center {
     text-align: center;
   }
   .font-medium {
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
+  }
+  .text-\[\#2c3e50\] {
+    color: #2c3e50;
   }
   .text-gray-700 {
     color: var(--color-gray-700);
@@ -661,6 +667,21 @@ td form button {
 .done {
   text-decoration: line-through;
   opacity: 0.6;
+}
+.priority-1 {
+  background: #c62828;
+}
+.priority-2 {
+  background: #ff5100;
+}
+.priority-3 {
+  background: #ff9800;
+}
+.priority-4 {
+  background: #ffea00;
+}
+.priority-5 {
+  background: #388e3c;
 }
 @property --tw-border-style {
   syntax: "*";

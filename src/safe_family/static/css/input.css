@@ -291,3 +291,26 @@ td form button {
     text-decoration: line-through;
     opacity: 0.6;
 }
+
+/* High = Red */
+.priority-1 {
+    background: #c62828;
+}
+
+.priority-2 {
+    background: #ff5100;
+}
+
+/* Medium = Orange */
+.priority-3 {
+    background: #ff9800;
+}
+
+.priority-4 {
+    background: #ffea00;
+}
+
+/* Low = Green */
+.priority-5 {
+    background: #388e3c;
+}
